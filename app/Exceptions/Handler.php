@@ -38,4 +38,17 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof TokenMismatchException) {
+            return redirect()
+                ->back()
+                ->withInput($request->except('password', 'password_confirmation', '_token'))
+                ->with(['error' => 'Your form has expired. Please try again']);
+        }
+        return parent::render($request, $exception);
+    }
+
 }
