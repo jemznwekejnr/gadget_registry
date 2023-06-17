@@ -18,6 +18,8 @@ class Gadgets extends Migration
             $table->string('type');
             $table->string('manufacturer');
             $table->string('model');
+            $table->string('imei1');
+            $table->string('imei2');
             $table->string('serialno');
             $table->string('year');
             $table->string('picture');

@@ -10,6 +10,9 @@ use Illuminate\Routing\Controller as BaseController;
 use App\Models\logs;
 use App\Models\notifications;
 use App\Models\Gadgets;
+use App\Models\Types;
+use App\Models\Manufacturer;
+use App\Models\User;
 use Auth;
 
 class Controller extends BaseController
@@ -49,5 +52,23 @@ class Controller extends BaseController
     public static function totaltype($type){
 
         return Gadgets::where('type', $type)->count();
+    }
+
+
+    public static function typename($type){
+
+        return Types::where('id', $type)->value('type');
+    }
+
+
+    public static function manufacturername($type){
+
+        return Manufacturer::where('id', $type)->value('manufacturer');
+    }
+
+
+    public static function username($user){
+
+        return User::find($user)->value('name');
     }
 }

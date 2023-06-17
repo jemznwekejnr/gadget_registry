@@ -7,6 +7,7 @@ use App\Http\Controllers\ManufacturerController;
 use App\Http\Controllers\SearchController;
 use App\Models\Types;
 use App\Models\Manufacturer;
+use App\Models\Gadgets;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,14 +21,16 @@ use App\Models\Manufacturer;
 */
 
 Route::get('/', function () {
-    return view('search', ['types' => Types::all(), 'manufacturers' => Manufacturer::all()]);
+    return view('search', ['types' => Types::all(), 'manufacturers' => Manufacturer::groupBy('manufacturer')->get(), 'models' => Gadgets::groupBy('model')->get()]);
 });
 
 Route::post('/submitsearch', [SearchController::class, 'submitsearch']);
 
+Route::get('/checkemailexist/{email}', [SearchController::class, 'checkemailexist']);
+
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+    return view('search', ['types' => Types::all(), 'manufacturers' => Manufacturer::groupBy('manufacturer')->get(), 'models' => Gadgets::groupBy('model')->get()]);
+})->middleware(['auth'])->name('search');
 
 require __DIR__.'/auth.php';
 
@@ -38,7 +41,7 @@ Route::get('/types', [TypesController::class, 'index']);
 
 Route::post('/type/store', [TypesController::class, 'store']);
 
-//Route::get('type/destroy/{id}', [TypesController::class, 'destroy']);
+Route::get('type/destroy/{id}', [TypesController::class, 'destroy']);
 
 
 /*************************** Gadget Manufacturer **********************************/
@@ -47,10 +50,14 @@ Route::get('/manufacturer', [ManufacturerController::class, 'index']);
 
 Route::post('/manufacturer/store', [ManufacturerController::class, 'store']);
 
+Route::get('/manufacturer/destroy/{id}', [ManufacturerController::class, 'destroy']);
+
 
 /*************************** Gadgets *****************************************/
 
 Route::get('/gadgets', [GadgetController::class, 'index']);
+
+Route::get('/gadgets/create', [GadgetController::class, 'create']);
 
 Route::post('/gadgets/store', [GadgetController::class, 'store']);
 
@@ -60,7 +67,13 @@ Route::get('/gadgets/edit/{id}', [GadgetController::class, 'edit']);
 
 Route::post('/gadgets/update', [GadgetController::class, 'update']);
 
-Route::get('gadgets/destroy/{id}', [GadgetController::class, 'destroy']);
+Route::get('/gadgets/destroy/{id}', [GadgetController::class, 'destroy']);
+
+Route::get('/gadgets/fetchmanufacturers/{id}', [SearchController::class, 'fetchmanufacturers']);
+
+Route::get('/gadgets/fetchmodel/{id}', [SearchController::class, 'fetchmodel']);
+
+Route::get('/dashboards', [SearchController::class, 'dashboard']);
 
 /************************** Search **********************************************/
 

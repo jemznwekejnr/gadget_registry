@@ -60,12 +60,6 @@
     <script src="{{ asset('assets/vendor/jqvmap/js/jquery.vmap.usa.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     <script src="{{ asset('assets/js/deznav-init.js') }}"></script>
-
-    <script>
-        $("#startdate").change(function(){
-            $("#enddate").removeAttr("readonly");
-        })
-    </script>
 	
 	
 </body>

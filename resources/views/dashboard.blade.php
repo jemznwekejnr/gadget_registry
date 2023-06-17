@@ -70,4 +70,3 @@
    Content body end
 ***********************************-->
 @include("layouts.app-footer")
-@include("process.dashboard")

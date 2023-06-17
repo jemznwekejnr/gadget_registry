@@ -43,7 +43,7 @@
 
     <!--*******************
         Preloader start
-    ********************-->
+    ********************--
     <div id="preloader">
 		<div class="lds-ripple">
 			<div></div>

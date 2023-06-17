@@ -31,13 +31,14 @@
 						</div>
 						<div class="card-body">
 							<div class="basic-form">
-								<form action="gadgets/store" method="post" id="submitgadget" enctype="multipart/form-data">
+								<form action="/gadgets/store" method="post" id="submitgadget" enctype="multipart/form-data">
 									@csrf
 									<div class="row">
 										<div class="col-xl-3 col-md-3">
 											<div class="mb-3">
-												<select name="type" class="form-control input-rounded" id="type" required>
-													<option value="" selected disabled>Select Type</option>
+												<label>Device Category</label>
+												<select name="type" class="form-control input-rounded" id="types" required>
+													<option value="" selected disabled>Select Category</option>
 													@foreach($types as $type)
 													<option value="{{ $type->id }}">{{ $type->type }}</option>
 													@endforeach
@@ -46,19 +47,25 @@
 										</div>
 										<div class="col-xl-4 col-md-4">
 											<div class="mb-3">
-												<input type="text" class="form-control input-rounded" name="manufacturer" id="manufacturer" placeholder="Manufacturer" required>
+												<label>Device Manufacturer</label>
+												<select name="manufacturer" class="form-control input-rounded" id="manufacturers" required>
+													<option value="" selected disabled>Select Manufacturer</option>
+													@include('gadgets.manufacturers')
+												</select>
 											</div>
 										</div>
 										<div class="col-xl-3 col-md-3">
 											<div class="mb-3">
-												<input type="text" class="form-control input-rounded" name="model" id="model" placeholder="Model" required>
+												<label>Device Model</label>
+												<input type="text" class="form-control input-rounded" name="model" id="model" placeholder="Enter Model No." required>
 											</div>
 										</div>
 										<div class="col-xl-2 col-md-2">
 											<div class="mb-3">
+												<label>Year of Manufacture</label>
 												<select class="form-control input-rounded" name="year" id="year" required>
 													<option value="" selected disabled>Select Year</option>
-													@for($i=1990; $i <= date('Y'); $i++)
+													@for($i=date('Y')+1; $i >= 1990; $i--)
 													<option>{{ $i }}</option>
 													@endfor
 												</select>
@@ -67,7 +74,7 @@
 									</div>
 
 									<div class="row">
-										<div class="col-xl-4 col-md-4">
+										<div class="col-xl-3 col-md-3">
 											<div class="mb-3">
 												<label>Upload Device Image</label>
 												<input type="file" class="form-control input-rounded" name="picture" id="picture" required>
@@ -75,11 +82,17 @@
 										</div>
 										<div class="col-xl-4 col-md-4">
 											<div class="mb-3">
+												<label>Device Serial No</label>
+												<input type="text" class="form-control input-rounded" name="serialno" id="serialno" placeholder="Enter Serial No or IMEI etc." required>
+											</div>
+										</div>
+										<div class="col-xl-3 col-md-3">
+											<div class="mb-3">
 												<label>Upload Proof of Ownership</label>
 												<input type="file" class="form-control input-rounded" name="proof" id="proof" required>
 											</div>
 										</div>
-										<div class="col-xl-4 col-md-4">
+										<div class="col-xl-2 col-md-2">
 											<div class="mb-3">
 												<label>Date of Purchase</label>
 												<input type="date" class="form-control input-rounded" name="purchasedate" id="purchasedate" required>
@@ -88,9 +101,21 @@
 									</div>
 
 									<div class="row">
-										<div class="col-xl-12 col-md-12 text-right float-right">
+										<div class="col-xl-4 col-md-4">
 											<div class="mb-3">
-												<button type="submit" id="button" class="btn btn-primary btn-sm btn-rounded">Submit</button>
+												<label>IMEI 1</label>
+												<input type="text" class="form-control input-rounded" name="serialno" id="serialno" placeholder="Enter Serial No or IMEI etc.">
+											</div>
+										</div>
+										<div class="col-xl-4 col-md-4">
+											<div class="mb-3">
+												<label>IMEI 2</label>
+												<input type="text" class="form-control input-rounded" name="serialno" id="serialno" placeholder="Enter Serial No or IMEI etc.">
+											</div>
+										</div>
+										<div class="col-xl-4 col-md-4"  style="text-align: right;">
+											<div class="mb-3">
+												<button type="submit" id="button" class="btn btn-primary btn-md btn-rounded">Submit</button>
 												<img src="{{ asset('assets/images/processing.gif') }}" width="50px;" id="processing" class="processing" style="display: none;">
 											</div>
 										</div>
@@ -105,4 +130,4 @@
    Content body end
 ***********************************-->
 @include("layouts.app-footer")
-@include("process.dashboard")
+@include("gadgets.process")

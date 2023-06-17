@@ -14,10 +14,14 @@ class SearchHistory extends Migration
     public function up()
     {
         Schema::create('search_history', function (Blueprint $table) {
-           $table->id();
-            $table->string('type');
-            $table->string('manufacturer');
+            $table->id();
+            $table->string('searchlevel');
             $table->string('serialno');
+            $table->string('type')->nullable();
+            $table->string('manufacturer')->nullable();
+            $table->string('model')->nullable();
+            $table->string('manufactureyear')->nullable();
+            $table->string('registrationyear')->nullable();
             $table->string('devicestatus')->nullable();
             $table->string('deviceid')->nullable();
             $table->string('owner')->nullable();

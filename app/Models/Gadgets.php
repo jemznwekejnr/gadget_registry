@@ -17,4 +17,22 @@ class Gadgets extends Model
      */
 
     protected $table = 'gadgets';
+
+    protected $fillable = [
+        'id',
+        'type',
+        'manufacturer',
+        'model',
+        'imei1',
+        'imei2',
+        'serialno',
+        'year',
+        'picture',
+        'ownersproof',
+        'purchasedate',
+        'owner',
+        'status',
+        'created_by',
+        'created_at'
+    ];
 }

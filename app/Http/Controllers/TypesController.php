@@ -131,29 +131,27 @@ class TypesController extends Controller
     public function destroy($id)
     {
         //softdelete record
-        /*if(Flight::destroy($id)){
+        $type = Types::find($id);
+        if(Types::destroy($id)){
 
             //log the event
 
-            $this->logevent("Successfully deleted gadget type ".$type." from the database.");
+            $this->logevent("Successfully deleted device category ".$type." from the database.");
 
 
-            return response()->json([
-                'message' => 'success',
-                'info' => 'Gadget Type Successfully Deleted'
-            ]);
+            return view('types.results', ['types' => Types::all()]);
 
         }else{
 
             //log the event
 
-            $this->logevent("Attempted to delete gadget type ".$type." from the database, but failed because.");
+            $this->logevent("Attempted to delete device category ".$type." from the database, but failed.");
 
 
             return response()->json([
                 'message' => 'error',
-                'info' => 'Unable to delete gadget type .'.$type.' to the database, please try again.'
+                'info' => 'Unable to delete device category, please try again.'
             ]);
-        }*/
+        }
     }
 }

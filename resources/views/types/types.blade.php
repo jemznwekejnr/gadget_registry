@@ -31,12 +31,12 @@
 						</div>
 						<div class="card-body">
 							<div class="basic-form">
-								<form action="type/store" method="post" id="submittype">
+								<form action="/type/store" method="post" id="submittype">
 									@csrf
 									<div class="row">
 										<div class="col-xl-6 col-md-6">
 											<div class="mb-3">
-												<input type="hidden" name="typeid" value="">
+												<input type="hidden" name="typeid" id="typeid" value="">
 												<input type="text" class="form-control input-rounded" name="type" id="type" placeholder="Enter Type">
 											</div>
 										</div>

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Gadgets;
+use App\Models\Manufacturer;
 use App\Models\Types;
+
+use Auth;
 
 class GadgetController extends Controller
 {
@@ -44,14 +47,14 @@ class GadgetController extends Controller
 
     public function store(Request $request){
         //check if device is currently in use
-        if(Gadgets::where([['type', $request->type], ['manufacturer', $request->manufacturer], ['serialno', $request->serialno], ['status', 'In Use']])){
+        if(Gadgets::where([['type', $request->type], ['manufacturer', $request->manufacturer], ['serialno', $request->serialno], ['model', $request->model], ['status', 'In Use']])->count() == 1){
 
             //log the event
             $this->logevent("Attempted to add a device of type ".$request->type." with serial no ".$request->serialno." to the database, but failed because the device is currently in use.");
 
             return response()->json([
                 'message' => 'error',
-                'info' => 'Ths device is currently in use by another user and cannot be re-registered'
+                'info' => 'This device is currently in use by another user and cannot be re-registered'
             ]);
         }
 
@@ -68,7 +71,7 @@ class GadgetController extends Controller
 
 
         try{
-            $proof = $request->file('ownersproof');
+            $proof = $request->file('proof');
             $proofurl = $proof->store('assets/attachments');
         } catch (\Exception $e) {
             return response()->json([
@@ -80,18 +83,20 @@ class GadgetController extends Controller
 
         try{
             $gadget = Gadgets::create(
-                ['type' => $request->type],
-                ['manufacturer' => $request->manufacturer],
-                ['model' => $request->model],
-                ['serialno' => $request->serialno],
-                ['year' => $request->year],
-                ['picture' => $picsurl],
-                ['ownersproof' => $proofurl],
-                ['purchasedate' => $request->purchasedate],
-                ['owner' => Auth::user()->id],
-                ['status' => 'In Use'],
-                ['created_by' => Auth::user()->id],
-                ['created_at' => date('Y-m-d H:i:s')]
+                ['type' => $request->type,
+                'manufacturer' => $request->manufacturer,
+                'model' => $request->model,
+                'imei1' => $request->imei1,
+                'imei2' => $request->imei2,
+                'serialno' => $request->serialno,
+                'year' => $request->year,
+                'picture' => $picsurl,
+                'ownersproof' => $proofurl,
+                'purchasedate' => $request->purchasedate,
+                'owner' => Auth::user()->id,
+                'status' => 'In Use',
+                'created_by' => Auth::user()->id,
+                'created_at' => date('Y-m-d H:i:s')]
             );
         } catch (\Exception $e) {
             return response()->json([
@@ -136,8 +141,11 @@ class GadgetController extends Controller
      */
     public function show($id)
     {
-        //fetch single gadget by id
-        return view('gadgets.profile', ['gadgets' => Gadgets::find($id)]);
+        $gadgets = Gadgets::where('id', $id)->get();
+
+        //dump($gadgets[0]->picture);
+        
+        return view('gadgets.profile', ['gadgets' => Gadgets::where('id', $id)->get()]);
     }
     /**
      * Show the form for editing the specified resource.
@@ -148,7 +156,7 @@ class GadgetController extends Controller
     public function edit($id)
     {
         //fetch single gadget by id
-        return view('gadgets.edit', ['gadgets' => Gadgets::find($id), 'types' => Types::all()]);
+        return view('gadgets.edit', ['gadgets' => Gadgets::where('id', $id)->get(), 'types' => Types::all()]);
     }
     /**
      * Update the specified resource in storage.
@@ -157,8 +165,9 @@ class GadgetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
+
         //update gadget details
         if(!empty($request->picture)){
             try{
@@ -192,17 +201,19 @@ class GadgetController extends Controller
 
         try{
             $gadget = Gadgets::where('id', $request->id)->update(
-                ['type' => $request->type],
-                ['manufacturer' => $request->manufacturer],
-                ['model' => $request->model],
-                ['serialno' => $request->serialno],
-                ['year' => $request->year],
-                ['picture' => $picsurl],
-                ['ownersproof' => $proofurl],
-                ['purchasedate' => $request->purchasedate],
-                ['status' => $request->status],
-                ['updated_by' => Auth::user()->id],
-                ['updated_at' => date('Y-m-d H:i:s')]
+                ['type' => $request->type,
+                'manufacturer' => $request->manufacturer,
+                'model' => $request->model,
+                'imei1' => $request->imei1,
+                'imei2' => $request->imei2,
+                'serialno' => $request->serialno,
+                'year' => $request->year,
+                'picture' => $picsurl,
+                'ownersproof' => $proofurl,
+                'purchasedate' => $request->purchasedate,
+                'status' => $request->status,
+                'updated_by' => Auth::user()->id,
+                'updated_at' => date('Y-m-d H:i:s')]
             );
         } catch (\Exception $e) {
             return response()->json([
@@ -273,5 +284,8 @@ class GadgetController extends Controller
             ]);
         }
     }
+
+
+    
 
 }

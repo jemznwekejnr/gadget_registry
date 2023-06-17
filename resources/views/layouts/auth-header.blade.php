@@ -20,6 +20,7 @@
 	<!-- FAVICONS ICON -->
 	<link rel="shortcut icon" type="{{ asset('assets/image/png') }}" href="{{ asset('assets/images/favicon.png') }}">
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 <body class="vh-100" style="background-image: url('assets/images/bgimages.jpeg'); background-size: cover; background-repeat: no-repeat;">

@@ -4,11 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreManufacturerRequest;
 use App\Http\Requests\UpdateManufacturerRequest;
+use Illuminate\Http\Request;
 use App\Models\Manufacturer;
 use App\Models\Types;
+use Auth;
 
 class ManufacturerController extends Controller
 {
+
+    //Authenticate user
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -36,17 +45,26 @@ class ManufacturerController extends Controller
      * @param  \App\Http\Requests\StoreManufacturerRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreManufacturerRequest $request)
+    public function store(Request $request)
     {
         //create new gadget type
         $type = $request->type;
         $manufacturer = $request->manufacturer;
-        $manufacturerid = $request->manufacturerid
+        $manufacturerid = $request->manufacturerid;
+
+        if(Manufacturer::where([['type', $type],['manufacturer', $manufacturer]])->count() > 0){
+
+            return response()->json([
+                'message' => 'error',
+                'info' => 'This device manufacturer has already been registered'
+            ]);
+
+        }
 
         try{
             $create = Manufacturer::updateOrCreate(
                 ['id' => $manufacturerid],
-                ['type' => $type, 'manufacturer' => $manufacturer]
+                ['type' => $type, 'manufacturer' => $manufacturer, 'created_by' => Auth::user()->id, 'created_at' => date('Y-m-d H:i:s')]
             );
         } catch (\Exception $e) {
             return response()->json([
@@ -62,10 +80,7 @@ class ManufacturerController extends Controller
             $this->logevent("Successfully added device manufacturer of ".$type."  and manufacturer ".$manufacturer." to the database.");
 
 
-            return response()->json([
-                'message' => 'success',
-                'info' => 'Device Manufacturer Successfully Added'
-            ]);
+            return view('manufacturers.results', ['manufacturers' => Manufacturer::all()]);
 
         }else{
 
@@ -121,8 +136,30 @@ class ManufacturerController extends Controller
      * @param  \App\Models\Manufacturer  $manufacturer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Manufacturer $manufacturer)
+    public function destroy($id)
     {
-        //
+        //softdelete record
+        $type = Manufacturer::find($id);
+        if(Manufacturer::destroy($id)){
+
+            //log the event
+
+            $this->logevent("Successfully deleted device manufacturer ".$type." from the database.");
+
+
+            return view('manufacturers.results', ['manufacturers' => Manufacturer::all()]);
+
+        }else{
+
+            //log the event
+
+            $this->logevent("Attempted to delete device manufacturer ".$type." from the database, but failed.");
+
+
+            return response()->json([
+                'message' => 'error',
+                'info' => 'Unable to delete device manufacturer, please try again.'
+            ]);
+        }
     }
 }

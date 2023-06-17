@@ -1,11 +1,11 @@
 <script>
 
-$("#submittype").on('submit', function(event){
+$("#submitmanufacturer").on('submit', function(event){
   event.preventDefault();
   
   $.ajax({
     type: 'POST',
-    url: '/type/store',
+    url: '/manufacturer/store',
     data: new FormData(this),
     contentType: false,
     cache: false,
@@ -24,7 +24,7 @@ $("#submittype").on('submit', function(event){
       $("#button").show();
       $("#processing").hide();
 
-      Swal.fire('Success!', 'Device Category Successfully Created.', 'success');
+      Swal.fire('Success!', 'Device Manufacturer Successfully Created.', 'success');
     
     	$("#results").html(data);
     }
@@ -38,20 +38,22 @@ $("#submittype").on('submit', function(event){
 
 
 
-$(".edittype").click(function(event){
+$(".editmanufacturer").click(function(event){
 	event.preventDefault();
 
 	var type = $(this).attr('id');
-	var typeid = $(this).attr('href');
+	var manufacturer = $(this).attr('title');
+	var manufacturerid = $(this).attr('href');
 
 	$("#type").val(type);
-	$("#typeid").val(typeid);
+	$("#manufacturer").val(manufacturer);
+	$("#manufacturerid").val(manufacturerid);
 	
 });
 
 
 
-$(".deletetype").click(function(event){
+$(".deletemanufacturer").click(function(event){
 
 		event.preventDefault();
 		
@@ -70,7 +72,7 @@ $(".deletetype").click(function(event){
 
 		  	$.ajax({
 	        type: 'GET',
-	        url: '/type/destroy/'+id,
+	        url: '/manufacturer/destroy/'+id,
 	        beforeSend:function(){
 	                $("#button").hide();
 	                $("#processing").show();
