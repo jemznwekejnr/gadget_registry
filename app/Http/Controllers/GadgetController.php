@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Gadgets;
+use App\Models\History;
 use App\Models\Manufacturer;
 use App\Models\Types;
+use App\Models\User;
 
 use Auth;
 
@@ -25,7 +27,7 @@ class GadgetController extends Controller
     public function index()
     {
         //fetch all gadgets
-        return view('gadgets.index', ['gadgets' => Gadgets::all()]);
+        return view('gadgets.index', ['gadgets' => Gadgets::all(), 'total' => Gadgets::all()->count(), 'inuse' => Gadgets::where('status', 'In Use')->count(), 'stolen' => Gadgets::where('status', 'Misplaced')->orWhere('status', 'Stolen', )->count(), 'sold' => Gadgets::where('status', 'Sold')->orWhere('status', 'Damaged', )->count()]);
     }
     /**
      * Show the form for creating a new resource.
@@ -286,6 +288,14 @@ class GadgetController extends Controller
     }
 
 
-    
+    public function history(){
+
+        return view('gadgets.history', ['historys' => History::all()]);
+    }
+
+    public function Users(){
+
+        return view('users', ['users' => User::all()]);
+    }
 
 }

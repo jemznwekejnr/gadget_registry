@@ -12,7 +12,7 @@
                 <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border: 1px solid #ffffff; border-collapse: collapse;">
                     <tr>
                         <td align="center" bgcolor="#6495ED" style="color: #153643; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">
-                            <img src="https://reliaenergy.com/reliaenergylogo.png" alt="Relia Energy" width="300" style="display: block;" />
+                            <img src="https://jarvis.com/javislogo.png" alt="JARVIS" width="300" style="display: block;" />
                         </td>
                     </tr>
                     <tr>
@@ -25,7 +25,7 @@
                                 </tr>
                                 <tr>
                                     <td style="padding: 20px 0 30px 0; color: #153643; font-family: Arial, sans-serif; font-size: 16px; line-height: 20px;">
-                                        A new circular has been sent which includes you as one the recipients, please log on to the platform to view details.<br /><br />
+                                        A search was conducted for one of your missing device at this location {{ $location }}, there are chances that this device might be at this location at the moment, kindly log on to your portal to view other details relating to this search.<br /><br />
                                         <br /><br /><br />
                                         Regards,
                                         <br /><br />
@@ -42,9 +42,9 @@
                             <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                 <tr>
                                     <td style="color: #ffffff; font-family: Arial, sans-serif; font-size: 14px;" width="75%">
-                                        &copy; Relia Energy ERP<br/>
-                                        <!--Powered by | 
-                                        <a href="https://www.andjemztech.com" style="color: #ffffff;"><font color="#ffffff">AndJemz Tech</font></a>--> 
+                                        &copy; JARVIS<br/>
+                                        Powered by | 
+                                        <a href="https://www.andjemztech.com" style="color: #ffffff;"><font color="#ffffff">Counter Fraud Center</font></a> 
                                     </td>
                                     <td align="right" width="25%">
                                         <table border="0" cellpadding="0" cellspacing="0">

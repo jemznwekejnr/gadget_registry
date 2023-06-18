@@ -5,6 +5,8 @@ use App\Http\Controllers\GadgetController;
 use App\Http\Controllers\TypesController;
 use App\Http\Controllers\ManufacturerController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\MyController;
+use App\Http\Controllers\GeneralController;
 use App\Models\Types;
 use App\Models\Manufacturer;
 use App\Models\Gadgets;
@@ -27,6 +29,8 @@ Route::get('/', function () {
 Route::post('/submitsearch', [SearchController::class, 'submitsearch']);
 
 Route::get('/checkemailexist/{email}', [SearchController::class, 'checkemailexist']);
+
+Route::get('/searchresult/{records}', [SearchController::class, 'searchresult']);
 
 Route::get('/dashboard', function () {
     return view('search', ['types' => Types::all(), 'manufacturers' => Manufacturer::groupBy('manufacturer')->get(), 'models' => Gadgets::groupBy('model')->get()]);
@@ -73,9 +77,21 @@ Route::get('/gadgets/fetchmanufacturers/{id}', [SearchController::class, 'fetchm
 
 Route::get('/gadgets/fetchmodel/{id}', [SearchController::class, 'fetchmodel']);
 
-Route::get('/dashboards', [SearchController::class, 'dashboard']);
+Route::get('/gadgets/history', [GadgetController::class, 'history']);
+
+Route::get('/users', [GadgetController::class, 'users']);
 
 /************************** Search **********************************************/
+
+
+/********************* My Controller **********************************************/
+
+Route::get('/mine/registereddevice', [MyController::class, 'registereddevice']);
+
+Route::get('/mine/searcheddevice', [MyController::class, 'searcheddevice']);
+
+Route::get('/dashboards', [MyController::class, 'dashboard']);
+
 
 
 

@@ -41,9 +41,16 @@
     @endif
 	</div>
     <div class="s007" style="margin-top: 0px; margin-left: 0px; background-image: url('assets/images/bgimages.jpeg'); background-size: cover; background-repeat: no-repeat;">
+
       <form method="POST" action="submitsearch" id="submitsearch">
         @csrf
+
+        <input type="hidden" name="searchtype" id="searchtype" value="Basic Search">
         <div class="inner-form">
+          <div class="advance-search" style="padding: 10px; margin-bottom: 30px;">
+              <h3>Before you pay for that item, findout the status to avoid stories that touch.</h3>
+          </div>
+
           <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
     <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Basic Search</button>
@@ -59,12 +66,13 @@
               <input id="search" name="searchtextbasic" type="text" placeholder="Search by IMEI, Serial No, VIN, etc..." />
               <div class="result-count">
                 <div class="icon-wrap">
-                <button type="submit" style="background-color: transparent; border: none;">
+                <button type="submit" id="button" class="button" style="background-color: transparent; border: none;">
                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" viewBox="0 0 20 20">
                   <path d="M18.869 19.162l-5.943-6.484c1.339-1.401 2.075-3.233 2.075-5.178 0-2.003-0.78-3.887-2.197-5.303s-3.3-2.197-5.303-2.197-3.887 0.78-5.303 2.197-2.197 3.3-2.197 5.303 0.78 3.887 2.197 5.303 3.3 2.197 5.303 2.197c1.726 0 3.362-0.579 4.688-1.645l5.943 6.483c0.099 0.108 0.233 0.162 0.369 0.162 0.121 0 0.242-0.043 0.338-0.131 0.204-0.187 0.217-0.503 0.031-0.706zM1 7.5c0-3.584 2.916-6.5 6.5-6.5s6.5 2.916 6.5 6.5-2.916 6.5-6.5 6.5-6.5-2.916-6.5-6.5z"></path>
                 </svg>
                 </button>
-              </div>
+                <img src="{{ asset('assets/images/processing.gif') }}" width="50px;" id="processing" class="processing" style="display: none;">
+              </div> 
             </div>
           </div>
         </div>
@@ -152,7 +160,8 @@
 
             <div class="row third">
               <div class="input-field">
-                <button class="btn-search" type="submit">Search</button>
+                <button class="btn-search button" type="submit">Search</button>
+                <img src="{{ asset('assets/images/processing.gif') }}" width="50px;" id="processing" class="processing" style="display: none;">
                 <!--<button class="btn-delete" id="delete">Delete</button>-->
               </div>
             </div>
@@ -244,6 +253,9 @@
         $("#profile-tab").addClass("active");
         $("#profile").addClass("show");
         $("#profile").addClass("active");
+
+        $("#searchtype").val("");
+        $("#searchtype").val("Advance Search");
       });
 
 
@@ -255,6 +267,43 @@
         $("#home-tab").addClass("active");
         $("#home").addClass("show");
         $("#home").addClass("active");
+
+        $("#searchtype").val("");
+        $("#searchtype").val("Basic Search");
+      });
+
+
+
+      
+      $("#submitsearch").on('submit', function(event){
+        event.preventDefault();
+        
+        $.ajax({
+          type: 'POST',
+          url: 'submitsearch',
+          data: new FormData(this),
+          contentType: false,
+          cache: false,
+          processData: false,
+          beforeSend:function(){
+                  $(".button").hide();
+                  $(".processing").show();
+              },
+          success: function(data){
+
+          if(data.message == 'success'){
+            Swal.fire('Success!', data.info, 'success');
+            setTimeout(function() {
+            location.href = 'searchresult/'+data.records;
+        }, 3000);
+          }else{
+            Swal.fire("Error!", data.info, "error");
+          }
+            
+              $(".button").show();
+              $(".processing").hide();
+          }
+        });
       });
 
       

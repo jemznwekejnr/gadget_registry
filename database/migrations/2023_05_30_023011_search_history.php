@@ -16,7 +16,7 @@ class SearchHistory extends Migration
         Schema::create('search_history', function (Blueprint $table) {
             $table->id();
             $table->string('searchlevel');
-            $table->string('serialno');
+            $table->string('serialno')->nullable();
             $table->string('type')->nullable();
             $table->string('manufacturer')->nullable();
             $table->string('model')->nullable();

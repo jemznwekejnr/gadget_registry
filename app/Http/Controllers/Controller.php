@@ -23,7 +23,7 @@ class Controller extends BaseController
     public static function logevent($action){
 
         $logs = logs::create([
-            'user' => Auth::user()->id,
+            'user' => Auth::user()->id ?? 0,
             'action' => $action,
             'created_at' => date('Y-m-d H:i:s'),
         ]);
@@ -34,7 +34,7 @@ class Controller extends BaseController
     //send notification on the system
     public static function createnotification($staff, $type, $title, $status, $location){
 
-        $logs = logs::create([
+        $logs = notifications::create([
             'staff' => $staff,
             'type' => $type,
             'title' => $title,
@@ -46,6 +46,11 @@ class Controller extends BaseController
 
     }
 
+
+    public static function getdeviceinfo($device){
+
+        return Gadgets::find($device)->get();
+    }
 
 
     //get total types of a particular device
@@ -70,5 +75,10 @@ class Controller extends BaseController
     public static function username($user){
 
         return User::find($user)->value('name');
+    }
+
+    public static function useremail($user){
+
+        return User::find($user)->value('email');
     }
 }

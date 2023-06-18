@@ -3,7 +3,7 @@
         ***********************************-->
         <div class="footer">
             <div class="copyright">
-               <p>Copyright © Developed by Quorum Technologies LLC 2023</p>
+               <p>Copyright © Developed by Counter Fraud Center {{ date('Y') }}</p>
             </div>
         </div>
         <!--**********************************

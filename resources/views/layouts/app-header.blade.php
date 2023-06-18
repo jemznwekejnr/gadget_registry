@@ -7,7 +7,7 @@ Nav header start
 ***********************************-->
 <div class="nav-header">
 <a href="index.html" class="brand-logo">
-<img src="{{ asset('assets/images/logo/logofull-white.png') }}" alt="" class="width-230 logo-abbr">
+<img src="{{ asset('assets/images/jarvis-logo.png') }}" width="100px" alt="" class="width-230 logo-abbr">
 
 </a>
 <div class="nav-control">

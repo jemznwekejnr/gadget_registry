@@ -20,9 +20,9 @@ class SearchController extends Controller
         //ger user info
         $ip = $request->ip(); //Dynamic IP address
         $currentUserInfo = Location::get($ip);
+        //dd($request);
 
-        if(isset(Auth::user()->id)){
-
+        if($request->searchtype == "Advance Search"){
             $searchtext = $request->searchtextadvance;
             $types = $request->types;
             $manufacturer = $request->manufacturer;
@@ -31,26 +31,79 @@ class SearchController extends Controller
             $status = $request->status;
             $registeryear = $request->registeryear;
 
-            $searchs = Gadgets::where([
+
+            if(empty($searchtext) && empty($types) && empty($manufacturer) && empty($manufactureyear) && empty($model) && empty($status) && empty($registeryear)){
+
+                return response()->json([
+                    'message' => 'error',
+                    'info' => "Provide atleast one parameter to conduct search."
+                ]);
+
+            }
+
+            if(empty($searchtext)){
+                $searchtext = "0";
+            }
+
+            if(empty($types)){
+                $types = "0";
+            }
+
+            if(empty($manufacturer)){
+                $manufacturer = "0";
+            }
+
+            if(empty($manufactureyear)){
+                $manufactureyear = "0";
+            }
+
+            if(empty($model)){
+                $model = "0";
+            }
+
+            if(empty($status)){
+                $status = "0";
+            }
+
+            if(empty($registeryear)){
+                $registeryear = "0";
+            }
+
+
+
+            /*$searchs = Gadgets::where([
                             ['type', $types], 
                             ['manufacturer', $manufacturer], 
                             ['model', $model], 
                             ['year', $manufactureyear], 
                             ['status', $status],
                             ['created_at', 'LIKE', $registeryear.'%']])
-                    ->where(function(Builder $query) {
+                    ->where(function($query) use ($searchtext) {
                         $query->where('imei1', $searchtext)
                               ->orWhere('imei2', $searchtext)
                               ->orWhere('serialno', $searchtext);
-                    })->get();
+                    })->get();*/
+                    //dd($searchtext);
+            $searchs = Gadgets::where('type', $types) 
+                            ->orWhere('manufacturer', $manufacturer) 
+                            ->orWhere('model', $model) 
+                            ->orWhere('year', $manufactureyear) 
+                            ->orWhere('status', $status)
+                            ->orWhere('created_at', 'LIKE', $registeryear.'%')
+                            ->orWhere('imei1', $searchtext)
+                            ->orWhere('imei2', $searchtext)
+                            ->orWhere('serialno', $searchtext)
+                            ->get();
 
             if($searchs->count() > 0){
             //insert to search history
+                $searchid = array();
             foreach($searchs as $search){
+                $searchid[] = $search->id;
                 History::create(
                     ['searchlevel' => 'Advance Search',
                     'serialno' => $searchtext,
-                    'type' => $type,
+                    'type' => $types,
                     'manufacturer' => $manufacturer,
                     'model' => $model,
                     'manufactureyear' => $manufactureyear,
@@ -60,6 +113,7 @@ class SearchController extends Controller
                     'owner' => $search->owner,
                     'searchlocation' => $currentUserInfo,
                     'searchstatus' => 'Found',
+                    'searchtype' => $request->searchtype,
                     'created_at' => date('Y-m-d H:i:s')]
                 );
 
@@ -89,9 +143,11 @@ class SearchController extends Controller
                 }
 
                 return response()->json([
-                    'message' => 'succes',
-                    'info' => 'Record found',
-                    'result' => $search
+                    'message' => 'success',
+                    'info' => $searchs->count().' Record found',
+                    'result' => $search,
+                    'total' => $searchs->count(),
+                    'records' => $searchid
                 ]);
 
             }else{
@@ -100,7 +156,7 @@ class SearchController extends Controller
                 History::create(
                     ['searchlevel' => 'Advance Search',
                     'serialno' => $searchtext,
-                    'type' => $type,
+                    'type' => $types,
                     'manufacturer' => $manufacturer,
                     'model' => $model,
                     'manufactureyear' => $manufactureyear,
@@ -108,6 +164,7 @@ class SearchController extends Controller
                     'devicestatus' => $status,
                     'searchlocation' => $currentUserInfo,
                     'searchstatus' => 'Not Found',
+                    'searchtype' => $request->searchtype,
                     'created_at' => date('Y-m-d H:i:s')]
                 );
 
@@ -116,7 +173,7 @@ class SearchController extends Controller
 
                 return response()->json([
                     'message' => 'error',
-                    'info' => 'This device is not currently registered on this platform.'
+                    'info' => "We can't find any device in the system registered with the information provided at the moment."
                 ]);
 
             }
@@ -125,14 +182,25 @@ class SearchController extends Controller
 
         $searchtext = $request->searchtextbasic;
 
+        if(empty($searchtext)){
+
+            return response()->json([
+                    'message' => 'error',
+                    'info' => "Please provide serial no, IMEI, VIN etc. to search record."
+                ]);
+
+        }
+
         $searchs = Gadgets::where('imei1', $searchtext)
                         ->orWhere('imei2', $searchtext)
                         ->orWhere('serialno', $searchtext)
                         ->get();
 
         if($searchs->count() > 0){
+            $searchid = array();
             //insert to search history
             foreach($searchs as $search){
+                $searchid[] = $search->id;
                 History::create(
                     ['searchlevel' => 'Basic Search',
                     'serialno' => $searchtext,
@@ -141,6 +209,7 @@ class SearchController extends Controller
                     'owner' => $search->owner,
                     'searchlocation' => $currentUserInfo,
                     'searchstatus' => 'Found',
+                    'searchtype' => $request->searchtype,
                     'created_at' => date('Y-m-d H:i:s')]
                 );
 
@@ -169,13 +238,12 @@ class SearchController extends Controller
                     }
             }
 
-                
-
                 return response()->json([
-                    'message' => 'succes',
-                    'info' => 'Record found',
+                    'message' => 'success',
+                    'info' => $searchs->count().' Record found',
                     'search' => $searchtext,
-                    'total' => $searchs->count()
+                    'total' => $searchs->count(),
+                    'records' => $searchid
                 ]);
 
             }else{
@@ -185,6 +253,7 @@ class SearchController extends Controller
                     'serialno' => $searchtext,
                     'searchlocation' => $currentUserInfo,
                     'searchstatus' => 'Not Found',
+                    'searchtype' => $request->searchtype,
                     'created_at' => date('Y-m-d H:i:s')]
                 );
 
@@ -194,7 +263,7 @@ class SearchController extends Controller
 
                 return response()->json([
                     'message' => 'error',
-                    'info' => 'This device is not currently registered on this platform.'
+                    'info' => "We can't find any device registered with the serial number or IMEI provided at this search level, you can explore our advance search for more robust search."
                 ]);
 
             }
@@ -228,8 +297,19 @@ class SearchController extends Controller
     }
 
 
-    public function dashboard(){
+    public function searchresult($records){
 
-        return view('dashboard');
+        $total = explode(",", $records);
+        $gadgets = array();
+
+        for($i=1; $i<=count($total); $i++){
+
+            $gadgets[] = Gadgets::where('id', $i)->get();
+        }
+            //dd($gadgets);
+
+        return view('searchresult', ['gadgets' => $gadgets]);
     }
+
+    
 }

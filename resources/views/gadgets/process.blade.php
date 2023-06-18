@@ -39,6 +39,11 @@
 	      $("#processing").hide();
 
 	      Swal.fire('Success!', data.info, 'success');
+
+	      setTimeout(function() {
+            location.href = '/';
+        }, 3000);
+	      
 	    
 	    }
 	      

@@ -23,6 +23,6 @@ class History extends Model
         'deviceid',
         'owner',
         'searchlocation',
-        'searchstatus',
+        'searchstatus'
     ];
 }

@@ -4,7 +4,7 @@
 !--**********************************
    Content body start
 ***********************************-->
-<div class="content-body" style="margin-top: -17px; background-image: url('assets/images/bgimages.jpeg');">
+<div class="content-body" style="margin-top: -17px;">
    <!-- row -->	
 <div class="page-titles">
 	<ol class="breadcrumb">

@@ -104,13 +104,13 @@
 										<div class="col-xl-4 col-md-4">
 											<div class="mb-3">
 												<label>IMEI 1</label>
-												<input type="text" class="form-control input-rounded" name="serialno" id="serialno" placeholder="Enter Serial No or IMEI etc.">
+												<input type="text" class="form-control input-rounded" name="imei1" id="serialno" placeholder="Enter Serial No or IMEI etc.">
 											</div>
 										</div>
 										<div class="col-xl-4 col-md-4">
 											<div class="mb-3">
 												<label>IMEI 2</label>
-												<input type="text" class="form-control input-rounded" name="serialno" id="serialno" placeholder="Enter Serial No or IMEI etc.">
+												<input type="text" class="form-control input-rounded" name="imei2" id="serialno" placeholder="Enter Serial No or IMEI etc.">
 											</div>
 										</div>
 										<div class="col-xl-4 col-md-4"  style="text-align: right;">
